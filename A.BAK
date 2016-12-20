@@ -1,0 +1,41 @@
+code segment
+        assume cs:code
+main  proc 
+start:  mov ax,code
+        mov ds,ax
+        mov ax,0
+        mov es,ax
+	mov bx,es:[3ch]
+	mov word ptr oldint,bx
+	mov bx,es:[3eh]
+	mov word ptr oldint+2,bx 
+	cli
+	mov ax,offset inter
+	add ax,1000h
+	mov es:[3ch],ax
+	mov ax,0
+	mov es:[3eh],ax
+	sti
+ll:     call  disp
+        jmp ll
+main endp
+disp proc 
+        mov ax,0
+        ret
+disp endp
+inter proc
+      	push ds
+	push ax
+	
+	pop ax
+	pop ds
+	jmp oldint
+inter endp
+fen    db 0
+miao   db 0
+count  dw 18
+tab    db 3fh,6,5bh,4fh,6dh,6dh,7,7fh,6fh
+oldint dd ?
+
+code ends
+  end start
